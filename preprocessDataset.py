@@ -22,13 +22,15 @@ def fillRectangleWithOnes(tensor, coords):
     x2,y2 = coords[2]
     x3,y3 = coords[3]
     
-    x0,y0 = round(x0) - 6, round(y0) - 3
-    x1,y1 = round(x1) + 6, round(y1) - 3
-    x2,y2 = round(x2) + 6, round(y2) + 1
-    x3,y3 = round(x3) - 6, round(y3) + 1
+    xAddition = 1
+    yAddition = 1
+    x0,y0 = round(mulX(x0)) - xAddition, round(mulY(y0)) - 2 * yAddition
+    x1,y1 = round(mulX(x1)) + xAddition, round(mulY(y1)) - 2 * yAddition
+    x2,y2 = round(mulX(x2)) + xAddition, round(mulY(y2)) + yAddition
+    x3,y3 = round(mulX(x3)) - xAddition, round(mulY(y3)) + yAddition
 
-    for i in range(0, HEIGHT):
-        for j in range(0, WIDTH):
+    for i in range(0, OUTPUT_H):
+        for j in range(0, OUTPUT_W):
             if ((i >= y0) and (i <= y2)) and ((j >= x0) and (j <= x2)):
                 tensor[i][j] = 1
             if ((i >= y1) and (i <= y3)) and ((j >= x3) and (j <= x1)):
@@ -40,19 +42,21 @@ def fillRectangleWithOnes(tensor, coords):
 
 
 
-def fillRectangleWithClearOnes(tensor, coords):
+def fillPlateWithClearOnes(tensor, coords):
     x0,y0 = coords[0]
     x1,y1 = coords[1]
     x2,y2 = coords[2]
     x3,y3 = coords[3]
 
-    x0,y0 = round(x0 - 0.3), round(y0 - 0.3)
-    x1,y1 = round(x1 + 0.3), round(y1 - 0.3)
-    x2,y2 = round(x2 + 0.3), round(y2 + 0.3)
-    x3,y3 = round(x3 - 0.3), round(y3 + 0.3)
+    xAddition = 0.2
+    yAddition = 0.1
+    x0,y0 = round(mulX(x0 - xAddition)), round(mulY(y0 - yAddition))
+    x1,y1 = round(mulX(x1 + xAddition)), round(mulY(y1 - yAddition))
+    x2,y2 = round(mulX(x2 + xAddition)), round(mulY(y2 + yAddition))
+    x3,y3 = round(mulX(x3 - xAddition)), round(mulY(y3 + yAddition))
     
-    for i in range(0, HEIGHT):
-        for j in range(0, WIDTH):
+    for i in range(0, OUTPUT_H):
+        for j in range(0, OUTPUT_W):
             if ((i >= y0) and (i <= y2)) and ((j >= x0) and (j <= x2)):
                 tensor[i][j] = 1
             if ((i >= y1) and (i <= y3)) and ((j >= x3) and (j <= x1)):
@@ -62,6 +66,14 @@ def fillRectangleWithClearOnes(tensor, coords):
             if ((i >= y1) and (i <= y2)) and ((j >= x3) and (j <= x2)):
                 tensor[i][j] = 1
 
+
+
+
+def mulX(x):
+    return x * (18 / 70)
+
+def mulY(y):
+    return y * (11 / 42)
 
 #   RECTANGLE
 #
@@ -74,56 +86,20 @@ def fillRectangleWithClearOnes(tensor, coords):
 
 
 
-
-#[[0.109634,    0.111842,    0.109634],
-#[0.111842,    0.114094,    0.111842],
-#[0.109634,    0.111842,    0.109634]]
-
-
-
-#[[0.111096,    0.111119,    0.111096],
-#[0.111119,    0.111141,    0.111119],
-#[0.111096,    0.111119,    0.111096]]
-
-
-#[[0.039968,    0.039992,    0.04,    0.039992,    0.039968],
-#[0.039992,    0.040016,    0.040024,    0.040016,    0.039992],
-#[0.04,    0.040024,    0.040032,    0.040024,    0.04],
-#[0.039992,    0.040016,    0.040024,    0.040016,    0.039992],
-#[0.039968,    0.039992,    0.04,    0.039992,    0.039968]]
-
-
-#[[0.011237,    0.011637,    0.011931,    0.012111,    0.012172,    0.012111,    0.011931,    0.011637,    0.011237],
-#[0.011637,    0.012051,    0.012356,    0.012542,    0.012605,    0.012542,    0.012356,    0.012051,    0.011637],
-#[0.011931,    0.012356,    0.012668,    0.01286,    0.012924,    0.01286,    0.012668,    0.012356,    0.011931],
-#[0.012111,    0.012542,    0.01286,    0.013054,    0.013119,    0.013054,    0.01286,    0.012542,    0.012111],
-#[0.012172,   0.012605,    0.012924,    0.013119,    0.013185,    0.013119,    0.012924,    0.012605,    0.012172],
-#[0.012111,    0.012542,    0.01286,    0.013054,    0.013119,    0.013054,    0.01286,    0.012542,    0.012111],
-#[0.011931,    0.012356,    0.012668,    0.01286,    0.012924,    0.01286,    0.012668,    0.012356,    0.011931],
-#[0.011637,    0.012051,    0.012356,    0.012542,   0.012605,    0.012542,    0.012356,    0.012051,    0.011637],
-#[0.011237,    0.011637,    0.011931,    0.012111,    0.012172,    0.012111,    0.011931,    0.011637,    0.011237]]
-
-
-gaussian_weights = torch.tensor([[0.011237,    0.011637,    0.011931,    0.012111,    0.012172,    0.012111,    0.011931,    0.011637,    0.011237],
-                                 [0.011637,    0.012051,    0.012356,    0.012542,    0.012605,    0.012542,    0.012356,    0.012051,    0.011637],
-                                 [0.011931,    0.012356,    0.012668,    0.01286,    0.012924,    0.01286,    0.012668,    0.012356,    0.011931],
-                                 [0.012111,    0.012542,    0.01286,    0.013054,    0.013119,    0.013054,    0.01286,    0.012542,    0.012111],
-                                 [0.012172,   0.012605,    0.012924,    0.013119,    0.013185,    0.013119,    0.012924,    0.012605,    0.012172],
-                                 [0.012111,    0.012542,    0.01286,    0.013054,    0.013119,    0.013054,    0.01286,    0.012542,    0.012111],
-                                 [0.011931,    0.012356,    0.012668,    0.01286,    0.012924,    0.01286,    0.012668,    0.012356,    0.011931],
-                                 [0.011637,    0.012051,    0.012356,    0.012542,   0.012605,    0.012542,    0.012356,    0.012051,    0.011637],
-                                 [0.011237,    0.011637,    0.011931,    0.012111,    0.012172,    0.012111,    0.011931,    0.011637,    0.011237]]).unsqueeze(0).unsqueeze(0)
+gaussian_weights = torch.tensor([[0.109634,    0.111842,    0.109634],
+                                 [0.111842,    0.114094,    0.111842],
+                                 [0.109634,    0.111842,    0.109634]]).unsqueeze(0).unsqueeze(0)
 
 
 def heatmapFromMarkup(markup):
-    tensor = torch.zeros([HEIGHT, WIDTH])
+    tensor = torch.zeros([OUTPUT_H, OUTPUT_W])
     
     coordinatesArray = markup["plates"]
     for struct in coordinatesArray:
         fillRectangleWithOnes(tensor, struct["frame"])
     
     gaussianBlur = nn.Conv2d(1, 1,  stride=1,
-                         kernel_size=9, padding=4, bias=False)
+                         kernel_size=3, padding=1, bias=False)
     with torch.no_grad():
         gaussianBlur.weight = nn.Parameter(gaussian_weights)
 
@@ -132,15 +108,23 @@ def heatmapFromMarkup(markup):
 
 
 def plateMapFromMarkup(markup):
-    tensor = torch.zeros([HEIGHT, WIDTH])
+    tensor = torch.zeros([OUTPUT_H, OUTPUT_W])
     
     coordinatesArray = markup["plates"]
     for struct in coordinatesArray:
-        fillRectangleWithClearOnes(tensor, struct["frame"])
+        fillPlateWithClearOnes(tensor, struct["frame"])
     
     return tensor
 
-	
+
+def prepareImage(image):
+    image = torch.tensor(image).type(torch.FloatTensor)
+    r, g, p = image[:,:,0], image[:,:,1], image[:,:,2]
+    gray = 0.2989 * r + 0.5870 * g + 0.1140 * p
+    return gray
+
+
+
 
 dataset = Dataset()
 
@@ -154,7 +138,7 @@ for index in range(1, AMOUNT_OF_DATA  + 1):
         markup = json.load(f)
     
 
-    dataset.add(torch.tensor(img).type(torch.FloatTensor), heatmapFromMarkup(markup), plateMapFromMarkup(markup))
+    dataset.add(prepareImage(img), heatmapFromMarkup(markup), plateMapFromMarkup(markup))
     print("done -", index)
 
 

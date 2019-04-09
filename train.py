@@ -22,7 +22,8 @@ def checkAccuracy(model, loader):
         loss = []
         for i in range(index):
             x,h,p = loader.getSample()
-            x = x.view(3,42,70).unsqueeze(0)
+            
+            x = x.unsqueeze(0).unsqueeze(0)
             x = model(x).squeeze(0).squeeze(0)
             loss.append(totalLoss(x,h,p))
     return loss
@@ -37,7 +38,7 @@ for e in range(EPOCHS):
         # instead of passing minibatches through model
         for s in range(ALABATCH):
             x,h,p = loaderTrain.getSample()
-            x = x.view(3,42,70).unsqueeze(0)
+            x = x.unsqueeze(0).unsqueeze(0)
             map = model(x).squeeze(0).squeeze(0)
             loss += totalLoss(map,h,p)
           

@@ -23,6 +23,7 @@ class Dataset:
 
     def __len__(self):
         return len(self.data)
+    
 
     def shuffle(self):
         indicies = [i for i in range(0, len(self.data))]
