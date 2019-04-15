@@ -62,3 +62,25 @@ class TroubleShooter(nn.Module):
 
 
 
+class TroubleShooterNext(nn.Module):
+    def __init__(self):
+        super(TroubleShooterNext, self).__init__()
+        
+        self.features = nn.Sequential()
+        
+        self.features.add_module('conv1', ConvolutionalLayer(1, 32))
+        self.features.add_module('conv2', ConvolutionalLayer(32, 32))
+        self.features.add_module('maxPool1', nn.MaxPool2d(2,2,(1,0)))
+        self.features.add_module('conv4', ConvolutionalLayer(32, 64))
+        self.features.add_module('conv5', ConvolutionalLayer(64, 64))
+        self.features.add_module('conv6', ConvolutionalLayer(64, 64))
+        self.features.add_module('helper', torch.nn.ZeroPad2d((0, 1, 0, 0)))
+        self.features.add_module('maxPool2', nn.MaxPool2d(2,2,0))
+        self.features.add_module('conv7', ConvolutionalLayer(64, 128))
+        self.features.add_module('conv8', ConvolutionalLayer(128, 128))
+        self.features.add_module('conv9', ConvolutionalLayer(128, 64))
+        self.features.add_module('conv10', ComplicatedConvolutionalLayer(64, 1, 1, 0))
+    
+    def forward(self, x):
+        x = self.features(x)
+        return x
